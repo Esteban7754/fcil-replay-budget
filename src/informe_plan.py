@@ -1,6 +1,6 @@
 """Informe automático de un plan de experimentos: resultados/<plan>/INFORME.md y gráficas en informe/.
 
-    python informe_plan.py planes/plan_gpu.json
+    python src/informe_plan.py configs/plan_gpu.json
 
 Funciona con resultados parciales: cada tabla o gráfica usa lo que haya y lo dice.
 Cifras: media ± desviación típica muestral entre semillas (n indicado en cada tabla).
@@ -18,7 +18,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent  # raíz del repositorio
 ACCENT, GREY, DARK = "#2a78d6", "#a7a59e", "#52514e"
 plt.rcParams.update({"figure.facecolor": "#fcfcfb", "axes.facecolor": "#fcfcfb", "axes.spines.top": False,
                      "axes.spines.right": False, "axes.grid": True, "grid.color": "#e1e0d9", "axes.axisbelow": True,
@@ -246,4 +246,4 @@ def main(plan_path):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "planes/plan_gpu.json")
+    main(sys.argv[1] if len(sys.argv) > 1 else "configs/plan_gpu.json")

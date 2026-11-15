@@ -8,24 +8,30 @@ starting point, the buffer contents and the number of local updates in the secon
 CIFAR-100 split into two tasks of 50 classes (A: 0–49, B: 50–99), 10 IID clients, FedAvg and ResNet-18.
 
 This repository holds only what the paper needs: the experiment code, the exact plan that produced the
-reported runs, the per-seed results and the script that draws the figures. The experiment code is
-unchanged from the revision used for the runs. Comments and messages in the code are in Spanish.
+reported runs, the per-seed results and the script that draws the figures. The experiment modules are
+unchanged from the revision used for the runs; only the plan runner and report script were adapted to
+the `src/` layout (paths only). Comments and messages in the code are in Spanish.
 
 ## Layout
 
-| Path | Contents |
-|---|---|
-| `cifar100_three_buffer.py` | One experiment: phase 1 on A, then phase 2 on B with each buffer size (0/5/10/20 %). |
-| `fl_core.py` | Clients, FedAvg aggregation, local training, replay batch construction and the adapted ER-ACE loss. |
-| `cifar100_sampling.py`, `cifar100_validation.py` | Class-balanced nested buffers and checks of the training contract. |
-| `experiment_common.py`, `reproducibility.py` | Shared helpers, seeding and environment record. |
-| `plan_experimentos.py` | Runs a plan (JSON): trains phase 1 once per seed, then every job from that checkpoint. |
-| `agregar_semillas.py`, `informe_plan.py` | Aggregate seeds and write `resultados/plan_gpu/INFORME.md`. |
-| `planes/plan_gpu.json` | The six jobs reported in the paper, with their seeds and arguments. |
-| `resultados/plan_gpu/` | Per-seed `config.json`, `history.csv` (accuracy per round) and `results.csv`. |
-| `paper/make_figures.py` | Draws Figs. 1–3 and Table 2 from `resultados/plan_gpu`. |
-| `paper/figures/`, `paper/tables/` | The figures and tables as they appear in the paper. |
-| `test_*.py` | Unit tests. |
+```
+src/                         experiment code
+  cifar100_three_buffer.py     one experiment: phase 1 on A, then phase 2 on B for each buffer size
+  fl_core.py                   clients, FedAvg, local training, replay batches, adapted ER-ACE loss
+  cifar100_sampling.py         class-balanced nested buffers
+  cifar100_validation.py       checks of the training contract
+  experiment_common.py         shared helpers
+  reproducibility.py           seeding and environment record
+  plan_experimentos.py         runs a plan: phase 1 once per seed, then every job from that checkpoint
+  agregar_semillas.py          aggregates the seeds of a job
+  informe_plan.py              writes resultados/plan_gpu/INFORME.md
+configs/plan_gpu.json        the six jobs reported in the paper, with their seeds and arguments
+resultados/plan_gpu/         per-seed config.json, history.csv (accuracy per round) and results.csv
+paper/                       make_figures.py, figures/ (Figs. 1–3) and tables/ (Table 2)
+tests/                       unit tests
+docker/, Dockerfile          reproducible image (pinned dependencies, CIFAR-100 at a pinned revision)
+requirements.lock            pinned Python dependencies
+```
 
 ## Jobs and the paper
 
@@ -50,32 +56,32 @@ python paper/make_figures.py
 
 ## Re-run the experiments (GPU recommended)
 
-With Docker (CIFAR-100 is downloaded at a pinned revision while building the image):
+Run every command from the repository root. With Docker:
 
 ```bash
 docker build -t fcil-replay-budget:gpu --build-arg TORCH_VARIANT=cuda .
 docker run --gpus all -v "$PWD/resultados_nuevos:/app/resultados" fcil-replay-budget:gpu \
-    python plan_experimentos.py planes/plan_gpu.json
+    python src/plan_experimentos.py configs/plan_gpu.json
 ```
 
 Without Docker, use Python 3.13 and the pinned versions:
 
 ```bash
 pip install -r requirements.lock
-python plan_experimentos.py planes/plan_gpu.json --dry-run   # list the commands
-python plan_experimentos.py planes/plan_gpu.json             # run them
+python src/plan_experimentos.py configs/plan_gpu.json --dry-run   # list the commands
+python src/plan_experimentos.py configs/plan_gpu.json             # run them
 ```
 
-`plan_experimentos.py` skips every job that already has a `results.csv`, so run it in an empty results
-folder to repeat the experiments. A single run looks like:
+`plan_experimentos.py` skips every job that already has a `results.csv`, so run it with an empty
+`resultados/` folder to repeat the experiments. A single run looks like:
 
 ```bash
-python cifar100_three_buffer.py --controlled-replay --local-epochs 5 --rounds 5 --seed 42 \
+python src/cifar100_three_buffer.py --controlled-replay --local-epochs 5 --rounds 5 --seed 42 \
     --buffers 0 5 10 20 --replay-mix balanced --output-dir resultados/ejemplo
 ```
 
 ## Tests
 
 ```bash
-python -m unittest discover -p "test_*.py"
+python -m unittest discover -s tests -t .
 ```

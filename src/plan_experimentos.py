@@ -1,8 +1,8 @@
 """Ejecuta un plan de experimentos (JSON) de principio a fin, sin intervención.
 
-    python plan_experimentos.py planes/plan_gpu.json             # ejecuta lo que falte
-    python plan_experimentos.py planes/plan_gpu.json --dry-run   # lista las tareas y los comandos
-    python plan_experimentos.py planes/plan_gpu.json --solo-informe
+    python src/plan_experimentos.py configs/plan_gpu.json             # ejecuta lo que falte
+    python src/plan_experimentos.py configs/plan_gpu.json --dry-run   # lista las tareas y los comandos
+    python src/plan_experimentos.py configs/plan_gpu.json --solo-informe
 
 - Primero entrena la fase 1 de cada semilla y reparto una sola vez (``--only-phase1``);
   todos los trabajos de esa semilla y reparto la reutilizan con ``--phase1-checkpoint``.
@@ -27,7 +27,8 @@ import time
 from datetime import datetime, timedelta
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
+SRC = Path(__file__).resolve().parent  # código del experimento
+ROOT = SRC.parent  # raíz del repositorio: las rutas del plan y de resultados son relativas a ella
 
 
 def build_tasks(plan):
@@ -56,7 +57,7 @@ def is_done(task):
 
 
 def command(task):
-    return [sys.executable, "cifar100_three_buffer.py", *task["args"], "--output-dir", str(task["dir"])]
+    return [sys.executable, str(SRC / "cifar100_three_buffer.py"), *task["args"], "--output-dir", str(task["dir"])]
 
 
 PAUSED = 3  # código de salida cuando se para por el límite de tiempo con tareas pendientes
@@ -124,7 +125,7 @@ def run_plan(plan, args):
     parallel = args.paralelo or plan.get("paralelo", 1)
     threads = max(1, (os.cpu_count() or 2) // parallel)
     env = {**os.environ, "PYTHONUNBUFFERED": "1", "OMP_NUM_THREADS": str(threads), "MKL_NUM_THREADS": str(threads),
-           "PYTHONPATH": str(ROOT) + os.pathsep + os.environ.get("PYTHONPATH", "")}
+           "PYTHONPATH": str(SRC) + os.pathsep + os.environ.get("PYTHONPATH", "")}
     pending = [t for t in tasks if not is_done(t)]
     status = {t["id"]: ("hecha" if is_done(t) else "pendiente") for t in tasks}
     running = {}
@@ -232,9 +233,9 @@ def summarize(plan, plan_path):
         folder = out / job["id"]
         if len(list(folder.glob("seed_*/results.csv"))) >= 2:
             with open(folder / "resumen_semillas.log", "w", encoding="utf-8") as log:
-                subprocess.run([sys.executable, "agregar_semillas.py", str(folder)], cwd=ROOT,
+                subprocess.run([sys.executable, str(SRC / "agregar_semillas.py"), str(folder)], cwd=ROOT,
                                stdout=log, stderr=subprocess.STDOUT)
-    subprocess.run([sys.executable, "informe_plan.py", str(plan_path)], cwd=ROOT)
+    subprocess.run([sys.executable, str(SRC / "informe_plan.py"), str(plan_path)], cwd=ROOT)
 
 
 def main(argv=None):

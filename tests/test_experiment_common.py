@@ -12,7 +12,7 @@ import numpy as np
 
 from experiment_common import build_parser, apply_args, make_result, nested_buffer_indices, save_results_csv, step_budget
 
-HERE = Path(__file__).resolve().parent
+HERE = Path(__file__).resolve().parent.parent / "src"
 
 
 class BufferTests(unittest.TestCase):

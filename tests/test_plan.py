@@ -13,7 +13,7 @@ from unittest import mock
 import informe_plan
 import plan_experimentos
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent  # raíz del repositorio
 (ROOT / "resultados").mkdir(exist_ok=True)
 
 

@@ -1,8 +1,8 @@
 """Combina los results.csv de varias semillas: media, desviación típica y gráfico.
 
 Uso:
-    python agregar_semillas.py resultados/mi_experimento/seed_42 resultados/mi_experimento/seed_43 ...
-    python agregar_semillas.py resultados/mi_experimento          # busca seed_*/results.csv dentro
+    python src/agregar_semillas.py resultados/mi_experimento/seed_42 resultados/mi_experimento/seed_43 ...
+    python src/agregar_semillas.py resultados/mi_experimento          # busca seed_*/results.csv dentro
 
 Acepta tanto el formato de experiment_common (loss_a_pp, acc_a_after...) como el de
 cifar100_three_buffer.py (loss_a, step4_acc_a...).
