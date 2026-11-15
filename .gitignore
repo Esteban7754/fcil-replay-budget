@@ -1,0 +1,6 @@
+__pycache__/
+.venv/
+data/
+*.pt
+# Logs and per-run artefacts that are not needed to check the reported numbers
+resultados/**/*.log

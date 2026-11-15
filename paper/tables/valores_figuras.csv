@@ -1,0 +1,42 @@
+figura,serie,buffer_pct,metrica,media,desv_tipica,n
+fig1,No replay,0,step4_acc_a,0.0,0.0,5
+fig1,No replay,0,step4_acc_b,57.52,1.36,5
+fig1,No replay,0,acc_all_100_classes,28.76,0.68,5
+fig1,Conventional mix,20,step4_acc_a,26.08,0.68,5
+fig1,Conventional mix,20,step4_acc_b,56.48,1.07,5
+fig1,Conventional mix,20,acc_all_100_classes,41.28,0.83,5
+fig1,Balanced batches ($f=0.5$),20,step4_acc_a,39.52,0.28,5
+fig1,Balanced batches ($f=0.5$),20,step4_acc_b,52.08,1.03,5
+fig1,Balanced batches ($f=0.5$),20,acc_all_100_classes,45.8,0.66,5
+fig1,Adapted ER-ACE,20,step4_acc_a,44.07,0.32,3
+fig1,Adapted ER-ACE,20,step4_acc_b,50.05,0.43,3
+fig1,Adapted ER-ACE,20,acc_all_100_classes,47.06,0.13,3
+fig2,Conventional mix,5,acc_all_100_classes,33.12,1.08,5
+fig2,Conventional mix,10,acc_all_100_classes,37.26,0.95,5
+fig2,Conventional mix,20,acc_all_100_classes,41.28,0.83,5
+fig2,Balanced batches ($f=0.5$),5,acc_all_100_classes,37.84,0.82,5
+fig2,Balanced batches ($f=0.5$),10,acc_all_100_classes,41.91,0.78,5
+fig2,Balanced batches ($f=0.5$),20,acc_all_100_classes,45.8,0.66,5
+fig2,Adapted ER-ACE,5,acc_all_100_classes,42.98,0.37,3
+fig2,Adapted ER-ACE,10,acc_all_100_classes,45.39,0.2,3
+fig2,Adapted ER-ACE,20,acc_all_100_classes,47.06,0.13,3
+fig3,f=natural,10,retention_a_percent,35.76,0.69,3
+fig3,f=0.25,10,retention_a_percent,53.47,2.04,3
+fig3,f=0.5,10,retention_a_percent,62.2,0.51,5
+fig3,f=0.75,10,retention_a_percent,69.32,2.36,3
+fig3,conventional mix,10,retention_a_percent,35.31,,
+fig3,f=natural,20,retention_a_percent,53.66,0.55,3
+fig3,f=0.25,20,retention_a_percent,65.31,1.58,3
+fig3,f=0.5,20,retention_a_percent,82.31,1.07,5
+fig3,f=0.75,20,retention_a_percent,92.62,0.88,3
+fig3,conventional mix,20,retention_a_percent,54.32,,
+fig3,f=natural,10,acc_all_100_classes,38.07,0.06,3
+fig3,f=0.25,10,acc_all_100_classes,41.78,0.57,3
+fig3,f=0.5,10,acc_all_100_classes,41.91,0.78,5
+fig3,f=0.75,10,acc_all_100_classes,40.76,0.6,3
+fig3,conventional mix,10,acc_all_100_classes,37.26,,
+fig3,f=natural,20,acc_all_100_classes,42.09,0.2,3
+fig3,f=0.25,20,acc_all_100_classes,44.24,0.43,3
+fig3,f=0.5,20,acc_all_100_classes,45.8,0.66,5
+fig3,f=0.75,20,acc_all_100_classes,44.42,0.17,3
+fig3,conventional mix,20,acc_all_100_classes,41.28,,
